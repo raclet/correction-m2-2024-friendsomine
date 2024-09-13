@@ -1,6 +1,6 @@
 # FriendsOfMine M2 2024-25
 
-### NOM :
-### Prénom :
+### NOM : RACLET
+### Prénom : Jean-Baptiste
 ### Groupe de TP :
 - [x] 1
