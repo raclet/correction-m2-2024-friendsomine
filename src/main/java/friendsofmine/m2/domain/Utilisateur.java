@@ -1,11 +1,20 @@
 package friendsofmine.m2.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+@Entity
 public class Utilisateur {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @NotNull @Size(min = 1)
     private String nom;
@@ -18,6 +27,8 @@ public class Utilisateur {
 
     @NotNull @Pattern(regexp = "^[MF]{1}$")
     private String sexe;
+
+    public Utilisateur() {}
 
     public Utilisateur(String unNom, String unPrenom, String unEmail,
                        String unSexe) {
@@ -58,4 +69,9 @@ public class Utilisateur {
     public void setSexe(String sexe) {
         this.sexe = sexe;
     }
+
+    public Long getId() {
+        return id;
+    }
+
 }
