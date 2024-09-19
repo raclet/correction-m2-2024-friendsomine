@@ -1,5 +1,6 @@
 package friendsofmine.m2.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -27,6 +28,7 @@ public class Utilisateur {
     @NotNull @Pattern(regexp = "^[MF]{1}$")
     private String sexe;
 
+    @JsonIgnore // attention à choisir le bon import !!!
     @OneToMany(mappedBy = "responsable")
     private Collection<Activite> activites = new ArrayList<>();
     public Utilisateur() {}
