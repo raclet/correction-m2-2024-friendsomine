@@ -35,12 +35,10 @@ public class ActiviteService {
 
     public ArrayList<Activite> findAllActivites() {
         Iterable<Activite> activites = activiteRepository.findAll();
-        ArrayList<Activite> activiteList = new ArrayList<>();
 
+        ArrayList<Activite> activiteList = new ArrayList<>();
         activites.forEach(activiteList::add);
 
-        activiteList.sort(Comparator.comparing(Activite::getTitre)); // pas très malin... Plus loin, on verra qu'on peut
-                                                                     // requêter et trier en même temps
         return activiteList;
     }
     public long countActivite() {
