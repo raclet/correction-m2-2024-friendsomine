@@ -39,7 +39,7 @@ public class UtilisateurServiceIntegrationTest {
     public void testSaveUtilisateurNull(){
         // when: null est persisté via un UtilisateurService
         // then: une exception IllegalArgumentException est levée
-        assertThrows(IllegalArgumentException.class, () -> { utilisateurService.saveUtilisateur(null); });
+        assertThrows(IllegalArgumentException.class, () -> utilisateurService.saveUtilisateur(null));
     }
 
     @Test
@@ -68,7 +68,7 @@ public class UtilisateurServiceIntegrationTest {
         Utilisateur utilSaved = utilisateurService.saveUtilisateur(util);
         // when: on appelle findUtilisateurById avec l'id de cet Utilisateur
         Utilisateur fetched = utilisateurService.findUtilisateurById(utilSaved.getId());
-        // then: les attributs de l'Utilisateur obtenu en retour a les bonnes valeurs
+        // then: les attributs de l'Utilisateur obtenu en retour ont les bonnes valeurs
         assertEquals(utilSaved.getNom(), fetched.getNom());
         assertEquals(utilSaved.getPrenom(), fetched.getPrenom());
         assertEquals(utilSaved.getEmail(), fetched.getEmail());
@@ -97,7 +97,7 @@ public class UtilisateurServiceIntegrationTest {
         // given: un nouvel Utilisateur
         // when: cet Utilisateur est persisté
         utilisateurService.saveUtilisateur(new Utilisateur("john", "john", "john@john.fr", "M"));
-        // le nombre d'Utilisateur persisté a augmenté de 1
+        // le nombre d'Utilisateur persistés a augmenté de 1
         assertEquals(before + 1, utilisateurService.countUtilisateur());
     }
 
@@ -118,7 +118,7 @@ public class UtilisateurServiceIntegrationTest {
 
     @Test
     public void testFindUtilisateurWithUnexistingId() {
-        // when:  findUtilisateurById est appelé avec un id ne correspondant à aucun objet en base
+        // when: findUtilisateurById est appelé avec un id ne correspondant à aucun objet en base
         // then: null est retourné
         assertNull(utilisateurService.findUtilisateurById(1000L));
     }

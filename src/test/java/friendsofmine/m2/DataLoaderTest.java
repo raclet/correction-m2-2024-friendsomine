@@ -9,7 +9,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.spy;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,7 +37,7 @@ public class DataLoaderTest {
         // un DataLoader peut être construit à partir d'un ActiviteService et d'un UtilisateurService
         assertThat(dataLoader, is(notNullValue()));
         // un DataLoader est un ApplicationRunner
-        assertTrue(dataLoader instanceof ApplicationRunner);
+        assertInstanceOf(ApplicationRunner.class, dataLoader);
     }
 
     @Test

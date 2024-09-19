@@ -25,7 +25,7 @@ public class Utilisateur {
     @NotNull @Email
     private String email;
 
-    @NotNull @Pattern(regexp = "^[MF]{1}$")
+    @NotNull @Pattern(regexp = "^[MF]$")
     private String sexe;
 
     public Utilisateur() {}

@@ -39,7 +39,7 @@ public class ActiviteServiceIntegrationTest {
     public void testSaveActiviteNull(){
         // when: null est persisté via un ActiviteService
         // then: une exception IllegalArgumentException est levée
-        assertThrows(IllegalArgumentException.class, () -> { activiteService.saveActivite(null); });
+        assertThrows(IllegalArgumentException.class, () -> activiteService.saveActivite(null));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class ActiviteServiceIntegrationTest {
 
     @Test
     public void testFindActiviteWithUnexistingId() {
-        // when:  findActiviteById est appelé avec un id ne correspondant à aucun objet en base
+        // when: findActiviteById est appelé avec un id ne correspondant à aucun objet en base
         // then: null est retourné
         assertNull(activiteService.findActiviteById(1000L));
     }
