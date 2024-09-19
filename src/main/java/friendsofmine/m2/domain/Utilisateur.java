@@ -1,13 +1,12 @@
 package friendsofmine.m2.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity
 public class Utilisateur {
@@ -25,9 +24,11 @@ public class Utilisateur {
     @NotNull @Email
     private String email;
 
-    @NotNull @Pattern(regexp = "^[MF]$")
+    @NotNull @Pattern(regexp = "^[MF]{1}$")
     private String sexe;
 
+    @OneToMany(mappedBy = "responsable")
+    private Collection<Activite> activites = new ArrayList<>();
     public Utilisateur() {}
 
     public Utilisateur(String unNom, String unPrenom, String unEmail,
@@ -73,5 +74,15 @@ public class Utilisateur {
     public Long getId() {
         return id;
     }
-
+    public Collection<Activite> getActivites() {
+        return activites;
+    }
+    public void setActivites(Collection<Activite> activites) {
+        this.activites = activites;
+    }
+    public void addActivite(Activite activite) {
+        if (!activites.contains(activite))
+            activites.add(activite);
+        activite.setResponsable(this);
+    }
 }

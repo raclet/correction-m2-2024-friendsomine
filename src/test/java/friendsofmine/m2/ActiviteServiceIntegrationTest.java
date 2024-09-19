@@ -1,6 +1,7 @@
 package friendsofmine.m2;
 
 import friendsofmine.m2.domain.Activite;
+import friendsofmine.m2.domain.Utilisateur;
 import friendsofmine.m2.services.ActiviteService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,10 +19,12 @@ public class ActiviteServiceIntegrationTest {
     private ActiviteService activiteService;
 
     private Activite act;
+    private Utilisateur utilisateur;
 
     @BeforeEach
     public void setup() {
-        act = new Activite("titre", "descriptif");
+        utilisateur = new Utilisateur("unNom", "unPrenom", "ttt@tttt.fr", "F");
+        act = new Activite("titre", "descriptif", utilisateur);
     }
 
     @Test
@@ -65,7 +68,6 @@ public class ActiviteServiceIntegrationTest {
     }
 
     @Test
-    @Transactional
     public void testUpdatedActiviteIsUpdated() {
         // given: une Activite persistée act
         Activite actSaved = activiteService.saveActivite(act);
@@ -82,7 +84,6 @@ public class ActiviteServiceIntegrationTest {
     }
 
     @Test
-    @Transactional
     public void testUpdateDoesNotCreateANewEntry() {
         // given: une Activite persistée act
         Activite actSaved = activiteService.saveActivite(act);
@@ -102,6 +103,40 @@ public class ActiviteServiceIntegrationTest {
         // when: findActiviteById est appelé avec un id ne correspondant à aucun objet en base
         // then: null est retourné
         assertNull(activiteService.findActiviteById(1000L));
+    }
+
+    @Test
+    public void testSaveActiviteWithNewUtilisateur() {
+        // given: une Activite non persistée act
+        // when: act est persistée
+        Activite actSaved = activiteService.saveActivite(act);
+        // then: son responsable est persisté aussi
+        assertNotNull(actSaved.getResponsable().getId());
+        // then: act est ajouté à la liste des activités du responsable
+        assertTrue(actSaved.getResponsable().getActivites().contains(actSaved));
+    }
+
+    @Test
+    public void testSaveActiviteWithAlreadySavedUtilisateur() {
+        // given: une Activite et un Utilisateur non persistés act
+        // when: l'Utilisateur est persisté
+        Utilisateur utilSaved = activiteService.getUtilisateurRepository().save(utilisateur);
+        // when: act est persistée
+        Activite actSaved = activiteService.saveActivite(act);
+        // then: act a un id
+        assertNotNull(actSaved.getId());
+        // then: act est ajouté à la liste des activités du responsable
+        assertTrue(actSaved.getResponsable().getActivites().contains(actSaved));
+    }
+
+    @Test
+    public void testAnActiviteIsOnlyAddedOnceToTheResponsable() {
+        long countActiviteResponsable = utilisateur.getActivites().size();
+        Activite act1 = new Activite("uneActivite", "unDescriptif", utilisateur);
+        Activite actSaved = activiteService.saveActivite(act1);
+        assertEquals(countActiviteResponsable + 1, utilisateur.getActivites().size());
+        actSaved = activiteService.saveActivite(act1);
+        assertEquals(countActiviteResponsable + 1, utilisateur.getActivites().size());
     }
 
 }

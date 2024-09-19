@@ -110,19 +110,11 @@ public class UtilisateurTest {
     }
 
     @Test
-    public void testGetters() {
-        String nom = "Dupont";
-        String prenom = "Jeanne";
-        String email = "jd@jd.com";
-        String sexe = "F";
-        // given: un Utilisateur util avec un nom, un prénom, un email et un sexe valides
-        // when: util est créé
-        Utilisateur util = new Utilisateur(nom, prenom, email, sexe);
-        // then: les getters retournent les valeurs fournies au constructeur
-        assertEquals(nom, util.getNom());
-        assertEquals(prenom, util.getPrenom());
-        assertEquals(email, util.getEmail());
-        assertEquals(sexe, util.getSexe());
+    public void testUnNouvelleUtilisateurEstSansActivite() {
+        // given; un nouvel Utilisateur
+        // when: l'Utilisateur util est créé
+        Utilisateur util = new Utilisateur("Durand", "Eric", "jd@jd.com", "M");
+        // then:  util n'a pas d'activité
+        assertEquals(0, util.getActivites().size(), "Un nouvel Utilisateur n'a pas d'activité");
     }
-
 }

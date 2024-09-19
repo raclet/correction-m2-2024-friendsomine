@@ -118,4 +118,22 @@ public class DataLoaderIntegrationTest {
         assertEquals("Procrastination", dataLoader.getProcrastination().getTitre());
         assertEquals("On verra demain", dataLoader.getProcrastination().getDescriptif());
     }
+
+    @Test
+    public void testLesBonsResponsablesSontAffectesAuxActivites() {
+        // Thom est responsable de l'activité "guitare"
+        assertEquals(dataLoader.getThom().getId(), dataLoader.getGuitare().getResponsable().getId());
+        // Karen est responsable de l'activité "poker"
+        assertEquals(dataLoader.getKaren().getId(), dataLoader.getPoker().getResponsable().getId());
+        // Julian est responsable de l'activité "ping pong"
+        assertEquals(dataLoader.getJulian().getId(), dataLoader.getPingpong().getResponsable().getId());
+        // Thom est responsable de l'activité "philo"
+        assertEquals(dataLoader.getThom().getId(), dataLoader.getPhilo().getResponsable().getId());
+        // Thom est responsable de l'activité "procrastination"
+        assertEquals(dataLoader.getThom().getId(), dataLoader.getProcrastination().getResponsable().getId());
+        // Ed est responsable de l'activité "jogging"
+        assertEquals(dataLoader.getEd().getId(), dataLoader.getJogging().getResponsable().getId());
+        // Ed est responsable de l'activité "muscu"
+        assertEquals(dataLoader.getEd().getId(), dataLoader.getMuscu().getResponsable().getId());
+    }
 }

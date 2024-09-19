@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@Transactional
 public class DataLoader implements ApplicationRunner {
 
     private ActiviteService activiteService;
@@ -62,31 +64,31 @@ public class DataLoader implements ApplicationRunner {
     }
 
     private void initGuitare() {
-        guitare = activiteService.saveActivite(new Activite("Guitare", "Matériel non fourni"));
+        guitare = activiteService.saveActivite(new Activite("Guitare", "Matériel non fourni", thom));
     }
 
     private void initMuscu() {
-        muscu = activiteService.saveActivite(new Activite("Muscu", "Créneau réservé le mardi"));
+        muscu = activiteService.saveActivite(new Activite("Muscu", "Créneau réservé le mardi", ed));
     }
 
     private void initPoker() {
-        poker = activiteService.saveActivite(new Activite("Poker", "Petite blind à 1 euro"));
+        poker = activiteService.saveActivite(new Activite("Poker", "Petite blind à 1 euro", karen));
     }
 
     private void initPingpong() {
-        pingpong = activiteService.saveActivite(new Activite("Ping Pong", "Matériel non fourni"));
+        pingpong = activiteService.saveActivite(new Activite("Ping Pong", "Matériel non fourni", jules));
     }
 
     private void initJogging() {
-        jogging = activiteService.saveActivite(new Activite("Jogging", "Tous les midis"));
+        jogging = activiteService.saveActivite(new Activite("Jogging", "Tous les midis", ed));
     }
 
     private void initPhilo() {
-        philo = activiteService.saveActivite(new Activite("Philo", "Le club des admirateurs de Socrate"));
+        philo = activiteService.saveActivite(new Activite("Philo", "Le club des admirateurs de Socrate", thom));
     }
 
     private void initProcrastination() {
-        procrastination = activiteService.saveActivite(new Activite("Procrastination", "On verra demain"));
+        procrastination = activiteService.saveActivite(new Activite("Procrastination", "On verra demain", thom));
     }
 
     public Utilisateur getThom() {
