@@ -2,6 +2,7 @@ package friendsofmine.m2;
 
 import friendsofmine.m2.domain.Activite;
 import friendsofmine.m2.domain.Utilisateur;
+import friendsofmine.m2.util.TransactionalRunner;
 import friendsofmine.m2.services.ActiviteService;
 import friendsofmine.m2.services.UtilisateurService;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,8 +10,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -25,6 +31,12 @@ public class UtilisateurServiceIntegrationTest {
 
     @Autowired
     private DataLoader dataLoader;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Autowired
+    private TransactionalRunner txRunner;
 
     private Utilisateur util;
     private Activite act;
@@ -201,7 +213,6 @@ public class UtilisateurServiceIntegrationTest {
     }
 
     @Test
-    @DirtiesContext // thank you Tommy B.!
     public void testDeleteJulian() {
         // given: une activite ping pong
         Activite pingpong = dataLoader.getPingpong();
@@ -224,6 +235,41 @@ public class UtilisateurServiceIntegrationTest {
         assertEquals(nbUtilisateur - 1, utilisateurService.countUtilisateur());
         // then: ping pong n'a plus de responsable
         assertNull(pingpong.getResponsable());
+    }
+
+    @Test
+    public void testUtilisateurAreVersioned() {
+        // given: un utilisateur fraîchement ajouté en base et positionné dans le contexte de persistance
+        Utilisateur utilisateur = entityManager.merge(dataLoader.getThom());
+
+        // when: on consulte le numéro de version de l'utilisateur
+        // then: l'utilisateur a le numéro de version 0
+        assertThat(utilisateur.getVersion(), is(0L));
+        // when: on modifie l'utilisateur en base
+        utilisateur.setEmail("new@mail.ru");
+        utilisateurService.saveUtilisateur(utilisateur);
+        entityManager.flush();
+        // then: l'utilisateur a le numéro de version 1
+        assertThat(utilisateur.getVersion(), is(1L));
+    }
+
+    @Test
+    public void testOptimisticLockingOnConcurrentUtilisateurModification() {
+        assertThrows(ObjectOptimisticLockingFailureException.class,
+                () ->
+                {
+                    txRunner.doInTransaction(em -> {
+                        em.persist(util);
+                    });
+                    txRunner.doInTransaction(em1 -> {
+                        Utilisateur u1 = em1.find(Utilisateur.class, util.getId());
+                        txRunner.doInTransaction(em2 -> {
+                            Utilisateur u2 = em2.find(Utilisateur.class, util.getId());
+                            u2.setEmail("new2@mail.ru");
+                        });
+                        u1.setEmail("new1@mail.ru");
+                    });
+                });
     }
 
 }

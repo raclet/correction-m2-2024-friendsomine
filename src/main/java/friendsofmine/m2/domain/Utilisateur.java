@@ -28,6 +28,9 @@ public class Utilisateur {
     @NotNull @Pattern(regexp = "^[MF]{1}$")
     private String sexe;
 
+    @Version
+    private Long version;
+
     @JsonIgnore // attention à choisir le bon import !!!
     @OneToMany(mappedBy = "responsable", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private Collection<Activite> activites = new ArrayList<>();
@@ -86,5 +89,9 @@ public class Utilisateur {
         if (!activites.contains(activite))
             activites.add(activite);
         activite.setResponsable(this);
+    }
+
+    public Long getVersion() {
+        return version;
     }
 }
