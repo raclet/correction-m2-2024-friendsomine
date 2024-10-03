@@ -17,6 +17,11 @@ public class UtilisateurService {
         return utilisateurRepository.save(utilisateur) ;
     }
 
+    public void deleteUtilisateur(Utilisateur utilisateur) {
+        utilisateur.getActivites().forEach(activite -> activite.setResponsable(null));
+        utilisateurRepository.delete(utilisateur);
+    }
+
     public Utilisateur findUtilisateurById(Long id) {
         return utilisateurRepository.findById(id).orElse(null);
     }

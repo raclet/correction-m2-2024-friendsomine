@@ -17,7 +17,7 @@ public class Activite {
 
     private String descriptif;
 
-    @NotNull
+    // @NotNull
     @ManyToOne
     private Utilisateur responsable ;
     public Activite() {

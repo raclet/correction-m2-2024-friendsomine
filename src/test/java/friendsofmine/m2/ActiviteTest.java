@@ -73,7 +73,7 @@ public class ActiviteTest {
         // when: act est créé
         Activite act = new Activite("unTitre", "unDescriptif", null);
         // then: act est validé par le validator
-        assertFalse(validator.validate(act).isEmpty());
+        assertTrue(validator.validate(act).isEmpty());
     }
 
     @Test

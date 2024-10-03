@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,6 +22,9 @@ public class UtilisateurServiceIntegrationTest {
 
     @Autowired
     private ActiviteService activiteService;
+
+    @Autowired
+    private DataLoader dataLoader;
 
     private Utilisateur util;
     private Activite act;
@@ -194,6 +198,32 @@ public class UtilisateurServiceIntegrationTest {
         utilisateurService.saveUtilisateur(util);
         // then: une nouvelle entrée n'a pas été créée en base
         assertEquals(count, activiteService.countActivite());
+    }
+
+    @Test
+    @DirtiesContext // thank you Tommy B.!
+    public void testDeleteJulian() {
+        // given: une activite ping pong
+        Activite pingpong = dataLoader.getPingpong();
+        // given: l'utilisateur Julian
+        Utilisateur julian = dataLoader.getJulian();
+        // given: le nombre total d'activite
+        long nbActivites = activiteService.countActivite();
+        // given: le nombre total d'utilisateur
+        long nbUtilisateur = utilisateurService.countUtilisateur();
+
+        // then: l'utilisateur référence bien l'activité dans sa liste de responsabilité
+        assertTrue(julian.getActivites().contains(pingpong));
+
+        // when: l'utilisateur est supprimée
+        utilisateurService.deleteUtilisateur(julian);
+
+        // then : le nombre d'activite est inchangé
+        assertEquals(nbActivites, activiteService.countActivite());
+        // then : le nombre d'utilisateur a diminué de 1
+        assertEquals(nbUtilisateur - 1, utilisateurService.countUtilisateur());
+        // then: ping pong n'a plus de responsable
+        assertNull(pingpong.getResponsable());
     }
 
 }
