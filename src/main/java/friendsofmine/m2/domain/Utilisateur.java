@@ -94,4 +94,16 @@ public class Utilisateur {
     public Long getVersion() {
         return version;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Utilisateur that = (Utilisateur) o;
+        if (nom != null ? !nom.equals(that.nom) : that.nom != null) return false;
+        if (prenom != null ? !prenom.equals(that.prenom) : that.prenom != null) return false;
+        if (email != null ? !email.equals(that.email) : that.email != null) return false;
+        return sexe != null ? sexe.equals(that.sexe) : that.sexe == null;
+    }
+
 }
