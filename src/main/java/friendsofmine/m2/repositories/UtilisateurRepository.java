@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UtilisateurRepository extends CrudRepository<Utilisateur, Long> {
-
+    public Utilisateur findByEmail(String email);
 }

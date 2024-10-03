@@ -9,12 +9,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
+import static java.time.Duration.ofMillis;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.*;
@@ -253,6 +254,7 @@ public class UtilisateurServiceIntegrationTest {
         assertThat(utilisateur.getVersion(), is(1L));
     }
 
+
     @Test
     public void testOptimisticLockingOnConcurrentUtilisateurModification() {
         assertThrows(ObjectOptimisticLockingFailureException.class,
@@ -270,6 +272,22 @@ public class UtilisateurServiceIntegrationTest {
                         u1.setEmail("new1@mail.ru");
                     });
                 });
+    }
+
+    @Test
+    public void testUtilisateurCanBeFetchedInLessThan7Seconds() {
+
+        assertTimeout(ofMillis(7000), () -> {
+            // when: les utilisateurs thom et karen sont récupérés en base
+            utilisateurService.findUtilisateurByEmail("thom@rh.com");
+            utilisateurService.findUtilisateurByEmail("karen@yyy.com");
+            // when: on répète une demande d'accès à thom et karen
+            utilisateurService.findUtilisateurByEmail("thom@rh.com");
+            utilisateurService.findUtilisateurByEmail("karen@yyy.com");
+            utilisateurService.findUtilisateurByEmail("thom@rh.com");
+            utilisateurService.findUtilisateurByEmail("thom@rh.com");
+            // then: les 6 requêtes sont exécutées en moins de 7 secondes
+        });
     }
 
 }
