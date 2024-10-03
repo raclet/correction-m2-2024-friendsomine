@@ -29,7 +29,7 @@ public class Utilisateur {
     private String sexe;
 
     @JsonIgnore // attention à choisir le bon import !!!
-    @OneToMany(mappedBy = "responsable")
+    @OneToMany(mappedBy = "responsable", cascade = CascadeType.ALL)
     private Collection<Activite> activites = new ArrayList<>();
     public Utilisateur() {}
 

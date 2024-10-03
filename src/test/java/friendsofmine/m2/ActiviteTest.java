@@ -14,7 +14,7 @@ import jakarta.validation.ValidatorFactory;
 public class ActiviteTest {
 
     private static Validator validator;
-    private final Utilisateur utilisateur = new Utilisateur("nom", "prenom", "toto@toto.fr", "F");
+    private Utilisateur utilisateur = new Utilisateur("nom", "prenom", "toto@toto.fr", "F");
 
     @BeforeAll
     public static void setup() {
@@ -23,7 +23,7 @@ public class ActiviteTest {
     }
 
     @Test
-    public void testTitreNonVideEtDescriptif() {
+    public void testTitreNonVideEtDescrptif() {
         // given: une Activite act avec un titre et un descriptif valides
         // when: act est créé
         Activite act = new Activite("unTitre", "unDescriptif", utilisateur);
@@ -72,7 +72,16 @@ public class ActiviteTest {
         // given: une Activite act avec un responsable null
         // when: act est créé
         Activite act = new Activite("unTitre", "unDescriptif", null);
-        // then: act n'est pas validé par le validator
+        // then: act est validé par le validator
         assertFalse(validator.validate(act).isEmpty());
+    }
+
+    @Test
+    public void testValidActiviteIsAddedToTheResponsableListOfActitive() {
+        // given: une Activite act avec un titre et un descriptif valides
+        // when: act est créé
+        Activite act = new Activite("unTitre", "unDescriptif", utilisateur);
+        // then: act appartient à la liste des activités du responsable
+        assertTrue(utilisateur.getActivites().contains(act));
     }
 }

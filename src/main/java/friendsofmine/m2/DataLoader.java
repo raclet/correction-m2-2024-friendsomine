@@ -28,6 +28,7 @@ public class DataLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         initUtilisateurs();
         initActivites();
+        saveUtilisateursAndActivites();
     }
 
     public void initUtilisateurs() {
@@ -38,19 +39,19 @@ public class DataLoader implements ApplicationRunner {
     }
 
     private void initThom() {
-        thom = utilisateurService.saveUtilisateur(new Utilisateur("Yorke", "Thom", "thom@rh.com", "M"));
+        thom = new Utilisateur("Yorke", "Thom", "thom@rh.com", "M");
     }
 
     private void initEd() {
-        ed = utilisateurService.saveUtilisateur(new Utilisateur("Obrien", "Ed", "ed@rh.com", "M"));
+        ed = new Utilisateur("Obrien", "Ed", "ed@rh.com", "M");
     }
 
     private void initKaren() {
-        karen = utilisateurService.saveUtilisateur(new Utilisateur("Orzolek", "Karen", "karen@yyy.com", "F"));
+        karen = new Utilisateur("Orzolek", "Karen", "karen@yyy.com", "F");
     }
 
     private void initJulian() {
-        jules = utilisateurService.saveUtilisateur(new Utilisateur("Casablancas", "Julian", "jc@ts.com", "M"));
+        jules = new Utilisateur("Casablancas", "Julian", "jc@ts.com", "M");
     }
 
     public void initActivites() {
@@ -64,31 +65,39 @@ public class DataLoader implements ApplicationRunner {
     }
 
     private void initGuitare() {
-        guitare = activiteService.saveActivite(new Activite("Guitare", "Matériel non fourni", thom));
+        guitare = new Activite("Guitare", "Matériel non fourni", thom);
     }
 
     private void initMuscu() {
-        muscu = activiteService.saveActivite(new Activite("Muscu", "Créneau réservé le mardi", ed));
+        muscu = new Activite("Muscu", "Créneau réservé le mardi", ed);
     }
 
     private void initPoker() {
-        poker = activiteService.saveActivite(new Activite("Poker", "Petite blind à 1 euro", karen));
+        poker = new Activite("Poker", "Petite blind à 1 euro", karen);
     }
 
     private void initPingpong() {
-        pingpong = activiteService.saveActivite(new Activite("Ping Pong", "Matériel non fourni", jules));
+        pingpong = new Activite("Ping Pong", "Matériel non fourni", jules);
     }
 
     private void initJogging() {
-        jogging = activiteService.saveActivite(new Activite("Jogging", "Tous les midis", ed));
+        jogging = new Activite("Jogging", "Tous les midis", ed);
     }
 
     private void initPhilo() {
-        philo = activiteService.saveActivite(new Activite("Philo", "Le club des admirateurs de Socrate", thom));
+        philo = new Activite("Philo", "Le club des admirateurs de Socrate", thom);
     }
 
     private void initProcrastination() {
-        procrastination = activiteService.saveActivite(new Activite("Procrastination", "On verra demain", thom));
+        procrastination = new Activite("Procrastination", "On verra demain", thom);
+    }
+
+    public void  saveUtilisateursAndActivites() {
+        thom = utilisateurService.saveUtilisateur(thom);
+        ed = utilisateurService.saveUtilisateur(ed);
+        karen = utilisateurService.saveUtilisateur(karen);
+        jules = utilisateurService.saveUtilisateur(jules);
+
     }
 
     public Utilisateur getThom() {
