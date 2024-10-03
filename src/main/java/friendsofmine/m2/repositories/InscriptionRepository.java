@@ -7,3 +7,4 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface InscriptionRepository extends PagingAndSortingRepository<Inscription, Long>, CrudRepository<Inscription, Long> {
     public Page<Inscription> findByParticipantNomOrActiviteTitreAllIgnoreCase(String nom, String titre, Pageable pageable);
+}

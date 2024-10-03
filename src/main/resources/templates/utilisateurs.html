@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Friends of Mine</title>
+  <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<h2>Liste des Utilisateurs</h2>
+<table class="w3-table-all w3-hoverable">
+  <tr>
+    <th>Id</th>
+    <th>Nom</th>
+    <th>Prénom</th>
+    <th>Email</th>
+    <th>Sexe</th>
+  </tr>
+  <tr th:each="utilisateur : ${utilisateurs}">
+    <td th:text="${utilisateur.id}"></td>
+    <td th:text="${utilisateur.nom}"></td>
+    <td th:text="${utilisateur.prenom}"></td>
+    <td th:text="${utilisateur.email}"></td>
+    <td th:text="${utilisateur.sexe}"></td>
+  </tr>
+</table>
+<h3>Filtre :</h3>
+<div class="w3-container w3-cell">
+  <p>
+  <form th:method="get" th:action="${'/utilisateur/search'}">
+    <input type="hidden" name="sexe" value="M" />
+    <button class="w3-button w3-black" type="submit">H</button>
+  </form>
+  </p>
+</div>
+<div class="w3-container w3-cell">
+  <p>
+  <form th:method="get" th:action="${'/utilisateur/search'}">
+    <input type="hidden" name="sexe" value="F" />
+    <button class="w3-button w3-black" type="submit">F</button>
+  </form>
+  </p>
+</div>
+</body>
+</html>
