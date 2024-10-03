@@ -4,6 +4,8 @@ import friendsofmine.m2.domain.*;
 import friendsofmine.m2.exceptions.InscriptionNotFoundException;
 import friendsofmine.m2.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,11 +47,12 @@ public class InscriptionController {
     }
 
     @GetMapping(value = "/api/inscription/search", produces="application/json;charset=UTF-8")
-    public List<Inscription> searchInscriptions(@RequestParam(value = "nom_utilisateur",required = false)String nomUtilisateur,
-                                                @RequestParam(value = "titre_activite",required = false)String titreActivite) {
+    public Page<Inscription> searchInscriptions(@RequestParam(value = "nom_utilisateur",required = false)String nomUtilisateur,
+                                                @RequestParam(value = "titre_activite",required = false)String titreActivite,
+                                                Pageable pageable) {
         if (nomUtilisateur == null && titreActivite == null)
-            return inscriptionService.findAllInscription();
-        return inscriptionService.findInscription(nomUtilisateur, titreActivite);
+            return inscriptionService.findAllInscription(pageable);
+        return inscriptionService.findInscription(nomUtilisateur, titreActivite, pageable);
     }
 
     public ActiviteService getActiviteService() {
