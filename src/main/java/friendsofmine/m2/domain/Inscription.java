@@ -2,7 +2,13 @@ package friendsofmine.m2.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.util.Date;
+
+@Entity
 public class Inscription {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @NotNull
     @ManyToOne
@@ -63,4 +69,9 @@ public class Inscription {
                 ", activite=" + activite +
                 '}';
     }
+
+    public Long getId() {
+        return id;
+    }
+
 }

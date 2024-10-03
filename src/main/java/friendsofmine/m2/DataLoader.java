@@ -1,8 +1,9 @@
 package friendsofmine.m2;
 
 import friendsofmine.m2.domain.Activite;
+import friendsofmine.m2.domain.Inscription;
 import friendsofmine.m2.domain.Utilisateur;
-import friendsofmine.m2.services.ActiviteService;
+import friendsofmine.m2.services.InscriptionService;
 import friendsofmine.m2.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -14,21 +15,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class DataLoader implements ApplicationRunner {
 
-    private ActiviteService activiteService;
     private UtilisateurService utilisateurService;
+    private InscriptionService inscriptionService;
+
     private Utilisateur thom, ed, karen, jules;
     private Activite guitare, muscu, poker, pingpong, jogging, philo, procrastination;
+    private Inscription thomAuPingPong, thomALaProcrastination, edAuJogging, karenALaPhilo, karenAuPingPong;
 
     @Autowired
-    public DataLoader(ActiviteService actS, UtilisateurService utilS) {
-        activiteService = actS;
+    public DataLoader(UtilisateurService utilS, InscriptionService insS) {
         utilisateurService = utilS;
+        inscriptionService = insS;
     }
 
     public void run(ApplicationArguments args) {
         initUtilisateurs();
         initActivites();
-        saveUtilisateursAndActivites();
+        initInscriptions();
+        saveUtilisateursAndActivitesAndInscriptions();
     }
 
     public void initUtilisateurs() {
@@ -92,12 +96,46 @@ public class DataLoader implements ApplicationRunner {
         procrastination = new Activite("Procrastination", "On verra demain", thom);
     }
 
-    public void  saveUtilisateursAndActivites() {
+    public void initInscriptions() {
+        initThomAuPingPong();
+        initThomALaProcrastination();
+        initEdAuJogging();
+        initKarenALaPhilo();
+        initKarenAuPingPong();
+    }
+
+    private void initThomAuPingPong() {
+        thomAuPingPong = new Inscription(thom, pingpong);
+    }
+
+    private void initThomALaProcrastination() {
+        thomALaProcrastination = new Inscription(thom, procrastination);
+    }
+
+    private void initEdAuJogging() {
+        edAuJogging = new Inscription(ed, jogging);
+    }
+
+    private void initKarenALaPhilo() {
+        karenALaPhilo = new Inscription(karen, philo);
+    }
+
+    private void initKarenAuPingPong() {
+        karenAuPingPong = new Inscription(karen, pingpong);
+    }
+
+
+    public void  saveUtilisateursAndActivitesAndInscriptions() {
         thom = utilisateurService.saveUtilisateur(thom);
         ed = utilisateurService.saveUtilisateur(ed);
         karen = utilisateurService.saveUtilisateur(karen);
         jules = utilisateurService.saveUtilisateur(jules);
 
+        thomAuPingPong = inscriptionService.saveInscription(thomAuPingPong);
+        thomALaProcrastination = inscriptionService.saveInscription(thomALaProcrastination);
+        edAuJogging = inscriptionService.saveInscription(edAuJogging);
+        karenALaPhilo = inscriptionService.saveInscription(karenALaPhilo);
+        karenAuPingPong = inscriptionService.saveInscription(karenAuPingPong);
     }
 
     public Utilisateur getThom() {
@@ -142,5 +180,25 @@ public class DataLoader implements ApplicationRunner {
 
     public Activite getProcrastination() {
         return procrastination;
+    }
+
+    public Inscription getThomAuPingPong() {
+        return thomAuPingPong;
+    }
+
+    public Inscription getThomALaProcrastination() {
+        return thomALaProcrastination;
+    }
+
+    public Inscription getEdAuJogging() {
+        return edAuJogging;
+    }
+
+    public Inscription getKarenALaPhilo() {
+        return karenALaPhilo;
+    }
+
+    public Inscription getKarenAuPingPong() {
+        return karenAuPingPong;
     }
 }

@@ -1,6 +1,7 @@
 package friendsofmine.m2;
 
 import friendsofmine.m2.services.ActiviteService;
+import friendsofmine.m2.services.InscriptionService;
 import friendsofmine.m2.services.UtilisateurService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,14 +23,14 @@ public class DataLoaderTest {
     private DataLoader dataLoader;
 
     @MockBean
-    private ActiviteService activiteService;
+    private UtilisateurService utilisateurService;
 
     @MockBean
-    private UtilisateurService utilisateurService;
+    private InscriptionService inscriptionService;
 
     @BeforeEach
     public void setUp() {
-        dataLoader = new DataLoader(activiteService, utilisateurService);
+        dataLoader = new DataLoader(utilisateurService, inscriptionService);
     }
 
     @Test
@@ -49,8 +50,10 @@ public class DataLoaderTest {
         verify(spy).initUtilisateurs();
         // then: la méthode initActivites() qui crée les objets activités
         verify(spy).initActivites();
-        // then: la méthode saveUtilisateursAndActivites() qui insère en base les objets utilisateurs et activités
-        verify(spy).saveUtilisateursAndActivites();
+        // then: la méthode initInscription() qui crée les objets inscriptions
+        verify(spy).initInscriptions();
+        // then: la méthode saveUtilisateursAndActivitesAndInscriptions() qui insère en base les objets utilisateurs, activités et inscriptions
+        verify(spy).saveUtilisateursAndActivitesAndInscriptions();
 
     }
 }
