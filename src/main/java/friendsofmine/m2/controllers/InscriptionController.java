@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class InscriptionController {
 
@@ -40,6 +42,14 @@ public class InscriptionController {
     @DeleteMapping(value = "/api/inscription/{id}")
     public void deleteInscription(@PathVariable("id") Long inscriptionId) {
         inscriptionService.deleteInscription(inscriptionId);
+    }
+
+    @GetMapping(value = "/api/inscription/search", produces="application/json;charset=UTF-8")
+    public List<Inscription> searchInscriptions(@RequestParam(value = "nom_utilisateur",required = false)String nomUtilisateur,
+                                                @RequestParam(value = "titre_activite",required = false)String titreActivite) {
+        if (nomUtilisateur == null && titreActivite == null)
+            return inscriptionService.findAllInscription();
+        return inscriptionService.findInscription(nomUtilisateur, titreActivite);
     }
 
     public ActiviteService getActiviteService() {

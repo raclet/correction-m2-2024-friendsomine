@@ -16,6 +16,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import org.springframework.http.MediaType;
 
@@ -102,5 +103,52 @@ public class InscriptionControllerIntegrationTest {
         assertEquals(count - 1, inscriptionService.countInscription());
     }
 
+    @Test
+    public void testSearchVide() throws Exception {
+        mockMvc.perform(get("/api/inscription/search"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$", hasSize((int)inscriptionService.countInscription())));
+    }
+    @Test
+    public void testSearchNomSimple() throws Exception {
+        mockMvc.perform(get("/api/inscription/search?nom_utilisateur=" + dataLoader.getThom().getNom()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].participant.nom", is(dataLoader.getThom().getNom())))
+                .andExpect(jsonPath("$[1].participant.nom", is(dataLoader.getThom().getNom())))
+                .andDo(print());
+        //.andExpect(jsonPath("$", hasSize(2))
+    }
+    @Test
+    public void testSearchNomSimpleAvecCasse() throws Exception {
+        mockMvc.perform(get("/api/inscription/search?nom_utilisateur=" + dataLoader.getThom().getNom().toUpperCase()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].participant.nom", is(dataLoader.getThom().getNom())))
+                .andExpect(jsonPath("$[1].participant.nom", is(dataLoader.getThom().getNom())))
+                .andDo(print());
+    }
+    @Test
+    public void testSearchActiviteSimple() throws Exception {
+        mockMvc.perform(get("/api/inscription/search?titre_activite=" + dataLoader.getPingpong().getTitre()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].activite.titre", is(dataLoader.getPingpong().getTitre())))
+                .andExpect(jsonPath("$[1].activite.titre", is(dataLoader.getPingpong().getTitre())))
+                .andDo(print());
+    }
+    @Test
+    public void testSearchNomEtActivite() throws Exception {
+        mockMvc.perform(get("/api/inscription/search?nom_utilisateur=" + dataLoader.getThom().getNom()
+                        + "&titre_activite=" +dataLoader.getPingpong().getTitre()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andDo(print());
+    }
 
 }
